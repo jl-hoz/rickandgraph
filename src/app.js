@@ -1,18 +1,19 @@
 import {GraphQLServer} from 'graphql-yoga';
-import { fetchData, storeData } from './utils';
+import { fetchData, removeDuplicate } from './utils';
 
 const typeDefs = `
 
 type Query{
     character(id: Int!): Character!
     characters(page: Int, size: Int, name: String, status: String, planet: String): [Character!]!
+    planets: [String!]!
 }
 
 type Character{
     id: Int!
     name: String!
     status: String!
-    planet: String!
+    planets: String!
 }
 `
 
@@ -52,6 +53,13 @@ const runApp = data => {
                     }   
                 });
             },
+            planets: (parent, args, ctx, info) => {
+                const list = [];
+                data.forEach(element => {
+                    list.push(element.origin.name);
+                });
+                return removeDuplicate(list);;
+            }
         }
     }
     
