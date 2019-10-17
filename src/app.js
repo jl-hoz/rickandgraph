@@ -17,28 +17,32 @@ type Character{
 
 const url = 'https://rickandmortyapi.com/api/character/';
 
-const resolvers = {
-    Query: {
-        character: (parent, args, ctx, info) => {
-            //Search object character using id from file
-            return{
-                //Show object character data
-                id: args.id,
-                name: 'NAme',
-                status: 'True',
-                planet: 'Earth',
-            }
-        }
-    }
-}
+
 
 /** 
  * Main App
  * @param data all rickyandmortyapi.com database
  */
 const runApp = data => {
+
+    const resolvers = {
+        Query: {
+            character: (parent, args, ctx, info) => {
+                //Search object character using id from file
+                const character = data.find(element => element.id == args.id);
+                return{
+                    //Show object character data
+                    id: args.id,
+                    name: character.name,
+                    status: character.status,
+                    planet: character.planet,
+                }
+            }
+        }
+    }
+    
     const server = new GraphQLServer({typeDefs, resolvers});
-    server.start();
+    server.start( () => console.log("listenting"));
 }
 
 fetchData(runApp, url);
