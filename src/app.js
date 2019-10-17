@@ -5,7 +5,7 @@ const typeDefs = `
 
 type Query{
     character(id: Int!): Character!
-    characters(page: Int, size: Int): [Character!]
+    characters(page: Int, size: Int, name: String, status: String, planet: String): [Character!]!
 }
 
 type Character{
@@ -17,8 +17,6 @@ type Character{
 `
 
 const url = 'https://rickandmortyapi.com/api/character/';
-
-
 
 /** 
  * Main App
@@ -40,10 +38,20 @@ const runApp = data => {
                 }
             },
             characters: (parent, args, ctx, info) => {
-                return{
-
-                }
-            }
+                const page = args.page || 1;
+                const size = args.size || 20;
+                let start = size*(page-1);
+                let finish = start + size;
+                const array = data.slice(start, finish);
+                return array.map(character => {
+                    return {
+                        id: character.id,
+                        name: character.name,
+                        status: character.status,
+                        planet: character.location.name
+                    }   
+                });
+            },
         }
     }
     
