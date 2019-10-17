@@ -5,12 +5,13 @@ const typeDefs = `
 
 type Query{
     character(id: Int!): Character!
+    characters(page: Int, size: Int): [Character!]
 }
 
 type Character{
     id: Int!
     name: String!
-    status: Boolean!
+    status: String!
     planet: String!
 }
 `
@@ -35,7 +36,12 @@ const runApp = data => {
                     id: args.id,
                     name: character.name,
                     status: character.status,
-                    planet: character.planet,
+                    planet: character.origin.name,
+                }
+            },
+            characters: (parent, args, ctx, info) => {
+                return{
+
                 }
             }
         }

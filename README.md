@@ -2,8 +2,8 @@
 
 ## Dependencias 
 
-GraphQLServer
-Request
-Yargs
-Nodemon
-Babel
+- GraphQLServer
+- Request
+- Yargs
+- Nodemon
+- Babel
