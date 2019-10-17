@@ -13,7 +13,7 @@ type Character{
     id: Int!
     name: String!
     status: String!
-    planets: String!
+    planet: String!
 }
 `
 
@@ -35,7 +35,7 @@ const runApp = data => {
                     id: args.id,
                     name: character.name,
                     status: character.status,
-                    planet: character.origin.name,
+                    planet: character.location.name,
                 }
             },
             characters: (parent, args, ctx, info) => {
@@ -43,15 +43,50 @@ const runApp = data => {
                 const size = args.size || 20;
                 let start = size*(page-1);
                 let finish = start + size;
-                const array = data.slice(start, finish);
-                return array.map(character => {
-                    return {
-                        id: character.id,
-                        name: character.name,
-                        status: character.status,
-                        planet: character.location.name
-                    }   
-                });
+                if(args.name){
+                    const listNames = data.filter(element => element.name == args.name);
+                    const array = listNames.slice(start, finish);
+                    return array.map(character => {
+                        return {
+                            id: character.id,
+                            name: character.name,
+                            status: character.status,
+                            planet: character.location.name,
+                        }   
+                    });
+                }else if(args.status){
+                    const listStatus = data.filter(element => element.status == args.status);
+                    const array = listStatus.slice(start, finish);
+                    return array.map(character => {
+                        return {
+                            id: character.id,
+                            name: character.name,
+                            status: character.status,
+                            planet: character.location.name,
+                        } 
+                    });
+                }else if(args.planet){
+                    const listPlanet = data.filter(element => element.origin.name == args.planet);
+                    const array = listPlanet.slice(start, finish);
+                    return array.map(character => {
+                        return {
+                            id: character.id,
+                            name: character.name,
+                            status: character.status,
+                            planet: character.origin.name,
+                        } 
+                    });
+                }else{
+                    const array = data.slice(start, finish);
+                    return array.map(character => {
+                        return {
+                            id: character.id,
+                            name: character.name,
+                            status: character.status,
+                            planet: character.location.name
+                        }   
+                    });
+                }
             },
             planets: (parent, args, ctx, info) => {
                 const list = [];
